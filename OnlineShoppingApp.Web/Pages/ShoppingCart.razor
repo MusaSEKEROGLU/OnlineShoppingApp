@@ -1,0 +1,63 @@
+﻿@page "/ShoppingCart"
+@inherits ShoppingCartBase
+
+
+
+@if (ShoppingCartItems == null && ErrorMessage == null)
+{
+    <DisplaySpinner />
+}
+else if (ErrorMessage != null)
+{
+    <DisplayError ErrorMessage="@ErrorMessage" />
+}
+else
+{
+    <h3 class="mb-5">Sepetiniz</h3>
+    @if (ShoppingCartItems.Count() > 0)
+    {
+        <div class="row mb-5">
+            <div class="col-md-9">
+                @foreach (var item in ShoppingCartItems)
+                {
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <img src="@item.ProductImageURL" width="300" class="img-thumbnail" />
+                        </div>
+                        <div class="col-md-8">
+                            <h5>@item.ProductName</h5>
+                            <div class="mb-4">@item.ProductDescription</div>
+                            <span>
+                                Fiyat: <b>@item.Price.ToString("C")</b>
+                                <input @oninput="()=>UpdateQty_Input(item.Id)" type="number" @bind="@item.Quantity" />
+                                <button data-itemId="@item.Id" class="btn btn-info btn-sm update-qty"
+                                        @onclick="(() => UpdateQtyCartItem_Click(item.Id, item.Quantity))">
+                                    Adet güncelle
+                                </button>
+                            </span>
+                            <div>
+                                <button @onclick="(() => DeleteCartItem_Click(item.Id))"
+                                        class="btn btn-danger">
+                                    <i class="fas fa-trash trash-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-md-3">
+                <h5>İşlem Özeti</h5>
+                <div class="mt-2">
+                    <div>Toplam - (@TotalQuantity ürün )&nbsp;&nbsp;<b>@TotalPrice</b></div>
+                    <a href="#" class="btn btn-success">
+                        <span class="oi oi-credit-card"></span>&nbsp; Ödeme Yap
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <h4>Sepetinizde ürün bulunmamaktadır!</h4>
+    }
+}

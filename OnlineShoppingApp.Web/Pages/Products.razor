@@ -1,0 +1,28 @@
+﻿@page "/"
+@inherits ProductBase
+
+
+@if (Products == null)
+{
+    <DisplaySpinner></DisplaySpinner>
+}
+else
+{
+    <h3 class="mb-5">Ürünlerimiz</h3>
+    var productCount = Products.Count();
+
+    @if (productCount > 0)
+    {
+        //ProductBase deki metodlar GetGroupedProductsByCategory(),GetCategoryName()
+
+        @foreach (var prodGroup in GetGroupedProductsByCategory())
+        {
+            <h4>@GetCategoryName(prodGroup)</h4>
+            //DisplayProductBase Parameter
+            <div class="row mt-3">
+                <DisplayProduct Products="@prodGroup.Take(4)"></DisplayProduct>
+            </div>
+            <hr class="mb-3" />
+        }
+    }
+}
